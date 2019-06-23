@@ -49,8 +49,7 @@ const server = http.createServer((req, res) => {
                 getLink.stdout.on('data', data => {
                     processedLink = data.toString();
                     savedLink = processedLink ? link : savedLink;
-                    response.links.push(processedLink);
-
+                    response.plink = processedLink.trim();
                 });
 
                 getLink.on('close', (e) => {
