@@ -127,7 +127,8 @@
                     })
                     .then(res => res.json())
                     .then(res => {
-                        redirect.href = res.links[0].link;
+                        console.log(res.plink);
+                        redirect.href = res.plink;
                         savedLink.href = res.link;
                         savedLink.innerText = res.link;
                         save.innerText = 'Gotowe!';
