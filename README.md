@@ -12,4 +12,4 @@ node index.js
 ```
 ## Preview
 
-![Stream Link](https://raw.githubusercontent.com/maeek/streamLink/master/streamLink.png)
+![Stream Link](https://raw.githubusercontent.com/maeek/streamLink/master/preview.png)
