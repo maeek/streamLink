@@ -3,167 +3,95 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="theme-color" content="#292929">
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=yes">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|KoHo:100,400" rel="stylesheet">
-    <title>Stream link</title>
+    <meta name="theme-color" content="#0E1F34">
+    <title>Stream linki</title>
     <style>
-         :root {
-            --dark-grey: #292929;
-            --light-grey: #343434;
-            --green: #24B474;
-            --almost-black: #181818;
-            --light: #D2D2D2;
-        }
-        
-        html {
-            height: 100%;
-            font-size: 1rem;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--dark-grey);
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            font-family: 'KoHo', Arial, Helvetica, sans-serif;
-        }
-        
-        .wrapper {
-            width: 600px;
-            margin-top: 30vh;
-        }
-        
-        h1 {
-            margin: 0;
-            color: var(--green);
-            font-weight: 100;
-            font-size: 2.5rem;
-            letter-spacing: .2rem;
-        }
-        
-        h3 {
-            margin: 1.5rem 0;
-            margin-top: 4rem;
-            color: var(--light);
-            font-weight: 100;
-            font-size: 2rem;
-        }
-        
-        p {
-            color: #8D8D8D;
-            margin: .3rem 0;
-        }
-        
-        .inputWrapper {
-            margin: 3.3rem 0;
-            display: flex;
-            width: 100%;
-            background: var(--light-grey);
-            border-radius: 5px;
+        div.con {
+            width: 50%;
+            height: 100vh;
+            background-color: #0E1F34;
+            text-align: center;
+            color: #FFF;
+            transition: background-color 1000ms, color 300ms;
             overflow: hidden;
         }
         
+        a {
+            color: #FFF;
+            transition: color 300ms;
+            text-decoration-color: #27B9A2;
+        }
+        
+        div.con:hover {
+            background-color: #395175;
+            color: #FFF !important;
+        }
+        
+        div.con:hover a {
+            color: #FFF !important;
+        }
+        
+        div.con div.btn {
+            width: auto;
+            height: auto;
+            margin-top: 37vh;
+            font-weight: 100;
+            font-size: 60px;
+            font-family: Arial;
+        }
+        
+        div.setup div.btn {
+            margin-top: 37vh;
+        }
+        
+        .setup {
+            transition: width .45s;
+        }
+        
         input {
-            flex: 1 0 auto;
+            width: 90%;
+            font-family: Roboto;
             background: transparent;
-            border: 0;
-            padding: .8rem 1rem;
+            border: none;
+            border-bottom: 1px solid #27B9A2;
+            color: #FFF;
             outline: none;
-            color: #F0F0F0;
-            font-size: 1rem;
+            text-align: center;
+            font-size: 35px;
+            height: 40px;
         }
         
         button {
-            width: 5rem;
-            background: var(--almost-black);
-            color: var(--green);
+            border: none;
+            background: transparent;
+            color: #FFF;
+            border-bottom: 2px solid #27B9A2;
+            font-size: 35px;
             outline: none;
-            border: 0;
-            transition: background .3s;
-            cursor: pointer;
-            font-size: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        i.material-icons {
-            font-size: inherit;
-        }
-        
-        button:hover {
-            background: #4E4E4E;
-        }
-        
-        .recent,
-        .nosaved {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            border-radius: 5px;
-            background: var(--light-grey);
-            padding: 1.5rem 1rem;
-            position: relative;
-            word-break: break-all;
-            color: var(--light);
-        }
-        
-        a[data-saved] {
-            color: var(--light);
-        }
-        
-        a[data-redirect] {
-            position: absolute;
-            top: .5rem;
-            right: .5rem;
-            text-transform: uppercase;
-            color: var(--green);
-            text-decoration: none;
-        }
-        
-        @media screen and (max-width:786px) {
-            .wrapper {
-                width: 90%;
-                margin-top: 15vh;
-            }
-            .recent {
-                padding: 2.5rem 1rem;
-                font-size: 1.2rem;
-            }
+            height: 45px;
         }
     </style>
 </head>
 
-<body>
-    <main class="wrapper">
-        <h1>Stream link</h1>
-        <p>Get stream links to videos</p>
-        <div class="inputWrapper">
-            <input type="url" name="link" placeholder="Paste link here">
-            <button>
-            <i class="material-icons">play_arrow</i>
-          </button>
+<body style="margin:0;padding: 0;">
+    <div class="con redirect" style="float:left;cursor: pointer;">
+        <div class="btn"><a data-redirect href="">Redirect</a></div>
+    </div>
+    <div class="con setup" style="float:right;">
+        <div class="btn">Setup</div>
+        <input type="text" name="link">
+        <button data-type="submit">Zapisz</button>
+        <div style="width:100%;padding-top: 15px;font-size: 33px;font-family: Arial;">Załadowany link<br>
+            <a data-saved href=""></a>
         </div>
-        <h3>Saved link</h3>
-        <div class="nosaved">No saved links</div>
-        <div class="recent">
-            <a data-saved href="https://www.cda.pl/video/1456946b8">https://www.cda.pl/video/1456946b8</a>
-            <a data-redirect href="">redirect</a>
-        </div>
-    </main>
+    </div>
 
     <script defer>
         const save = document.querySelector('button');
-        const icon = document.querySelector('button i');
         const redirect = document.querySelector('a[data-redirect]');
         const savedLink = document.querySelector('a[data-saved]');
         const input = document.querySelector('input[name="link"]');
-        const recent = document.querySelector('.recent');
-        const nosaved = document.querySelector('.nosaved');
-
+        const setup = document.querySelector('.setup');
         fetch('/', {
                 method: 'POST',
                 cache: 'no-cache',
@@ -176,21 +104,16 @@
             })
             .then(res => res.json())
             .then(res => {
-                if (res.link && res.plink) {
-                    nosaved.style.display = 'none';
-                    redirect.href = res.plink;
-                    savedLink.href = res.link;
-                    savedLink.innerText = res.link;
-                    recent.style.display = 'flex';
-                } else {
-                    recent.style.display = 'none';
-                    nosaved.style.display = 'flex';
-                }
+                redirect.href = res.plink;
+                savedLink.href = res.link;
+                savedLink.innerText = res.link;
             });
-
+        document.querySelector('.redirect').onclick = function() {
+            location.href = redirect.href;
+        }
         save.onclick = function() {
             if (input.value) {
-                icon.innerText = 'hourglass_empty';
+                save.innerText = 'Ładowanie...';
                 fetch('/', {
                         method: 'POST',
                         cache: 'no-cache',
@@ -204,24 +127,17 @@
                     })
                     .then(res => res.json())
                     .then(res => {
-                        if (res.link && res.links) {
-                            nosaved.style.display = 'none';
-                            input.value = '';
-                            redirect.href = res.links[0].link;
-                            savedLink.href = res.link;
-                            savedLink.innerText = res.link;
-                            icon.innerText = 'done';
-                            recent.style.display = 'flex';
-                            setTimeout(() => {
-                                icon.innerText = 'play_arrow';
-                            }, 3000);
-                        } else {
-                            nosaved.style.display = 'flex';
-                        }
-                    }).catch(e => {
-                        icon.innerText = 'warning';
+                        redirect.href = res.links[0].link;
+                        savedLink.href = res.link;
+                        savedLink.innerText = res.link;
+                        save.innerText = 'Gotowe!';
                         setTimeout(() => {
-                            icon.innerText = 'play_arrow';
+                            save.innerText = 'Zapisz';
+                        }, 3000)
+                    }).catch(e => {
+                        save.innerText = 'Nie udało sie uzyskać linku';
+                        setTimeout(() => {
+                            save.innerText = 'Zapisz';
                         }, 3000);
                     });
             }
