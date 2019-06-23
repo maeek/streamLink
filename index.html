@@ -207,7 +207,7 @@
                         if (res.link && res.links) {
                             nosaved.style.display = 'none';
                             input.value = '';
-                            redirect.href = res.links[0].link;
+                            redirect.href = res.plink;
                             savedLink.href = res.link;
                             savedLink.innerText = res.link;
                             icon.innerText = 'done';
