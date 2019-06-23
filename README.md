@@ -10,3 +10,6 @@ youtube-dl -g
 ```
 node index.js
 ```
+##Preview
+
+![Stream Link](https://raw.githubusercontent.com/maeek/streamLink/master/streamLink.png)
