@@ -6,6 +6,10 @@
     <meta name="theme-color" content="#0E1F34">
     <title>Stream linki</title>
     <style>
+        body {
+            background: #0E1F34;
+        }
+        
         div.con {
             width: 50%;
             height: 100vh;
@@ -19,6 +23,7 @@
         a {
             color: #FFF;
             transition: color 300ms;
+            -webkit-text-decoration-color: #27B9A2;
             text-decoration-color: #27B9A2;
         }
         
@@ -62,7 +67,7 @@
         }
         
         button {
-            border: none;
+            border: 0;
             background: transparent;
             color: #FFF;
             border-bottom: 2px solid #27B9A2;
@@ -75,25 +80,69 @@
 
 <body style="margin:0;padding: 0;">
     <div class="con redirect" style="float:left;cursor: pointer;">
-        <div class="btn"><a data-redirect href="">Redirect</a></div>
+        <div class="btn"><a data-redirect href="" class="redirect_link">Redirect</a></div>
     </div>
     <div class="con setup" style="float:right;">
         <div class="btn">Setup</div>
-        <input type="text" name="link">
-        <button data-type="submit">Zapisz</button>
+        <input type="text" name="link" class="input">
+        <button data-type="submit" class="save">Zapisz</button>
         <div style="width:100%;padding-top: 15px;font-size: 33px;font-family: Arial;">Załadowany link<br>
-            <a data-saved href=""></a>
+            <a data-saved href="" class="saved"></a>
         </div>
     </div>
+    <script>
+        function atEvt(obj, name, handler) {
+            if (obj.addEventListener) {
+                obj.addEventListener(name, handler, false);
+            } else {
+                obj.attachEvent('on' + name, handler);
+            }
 
-    <script defer>
-        window.addEventListener('DOMContentLoaded', function() {
-            var save = document.querySelector('button');
-            var redirect = document.querySelector('a[data-redirect]');
-            var savedLink = document.querySelector('a[data-saved]');
-            var input = document.querySelector('input[name="link"]');
-            var setup = document.querySelector('.setup');
+        }
 
+        var save = document.getElementsByClassName("save")[0];
+        var redirect = document.getElementsByClassName("redirect_link")[0];
+        var savedLink = document.getElementsByClassName("saved")[0];
+        var input = document.getElementsByClassName("input")[0];
+        var setup = document.getElementsByClassName("setup")[0];
+
+        function redirectClick() {
+            location.href = redirect.href;
+        }
+
+        function saveClick() {
+            if (input.value) {
+                save.innerText = 'Ładowanie...';
+                var req = new XMLHttpRequest();
+                req.open('POST', '/');
+                req.setRequestHeader('Content-Type', 'application/json');
+                req.onreadystatechange = function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+                            var res = JSON.parse(req.responseText);
+                            redirect.href = res.plink;
+                            savedLink.href = res.link;
+                            savedLink.innerText = res.link;
+                            save.innerText = 'Gotowe!';
+                            setTimeout(function() {
+                                save.innerText = 'Zapisz';
+                            }, 3000)
+                        } else {
+                            save.innerText = 'Nie udało sie uzyskać linku';
+                            setTimeout(function() {
+                                save.innerText = 'Zapisz';
+                            }, 3000);
+                        }
+                    }
+                };
+                req.send(JSON.stringify({
+                    action: 'new',
+                    link: input.value
+                }));
+            }
+        }
+
+        function init() {
 
             var req = new XMLHttpRequest();
             req.open('POST', '/');
@@ -114,43 +163,12 @@
                 action: 'get'
             }));
 
-            document.querySelector('.redirect').onclick = function() {
-                location.href = redirect.href;
-            }
-            save.onclick = function() {
-                if (input.value) {
-                    save.innerText = 'Ładowanie...';
-                    var req = new XMLHttpRequest();
-                    req.open('POST', '/');
-                    req.setRequestHeader('Content-Type', 'application/json');
-                    req.onreadystatechange = function() {
-                        if (req.readyState == 4) {
-                            if (req.status == 200) {
-                                var res = JSON.parse(req.responseText);
-                                redirect.href = res.plink;
-                                savedLink.href = res.link;
-                                savedLink.innerText = res.link;
-                                save.innerText = 'Gotowe!';
-                                setTimeout(() => {
-                                    save.innerText = 'Zapisz';
-                                }, 3000)
-                            } else {
-                                save.innerText = 'Nie udało sie uzyskać linku';
-                                setTimeout(() => {
-                                    save.innerText = 'Zapisz';
-                                }, 3000);
-                            }
-                        }
-                    };
-                    req.send(JSON.stringify({
-                        action: 'new',
-                        link: input.value
-                    }));
-                }
-            }
-        });
-    </script>
 
+            atEvt(document.getElementsByClassName('redirect')[0], 'click', redirectClick);
+            atEvt(save, 'click', saveClick);
+        }
+        atEvt(document, 'DOMContentLoaded', init);
+    </script>
 </body>
 
 </html>
