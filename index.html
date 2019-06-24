@@ -87,66 +87,68 @@
     </div>
 
     <script defer>
-        var save = document.querySelector('button');
-        var redirect = document.querySelector('a[data-redirect]');
-        var savedLink = document.querySelector('a[data-saved]');
-        var input = document.querySelector('input[name="link"]');
-        var setup = document.querySelector('.setup');
+        window.addEventListener('DOMContentLoaded', function() {
+            var save = document.querySelector('button');
+            var redirect = document.querySelector('a[data-redirect]');
+            var savedLink = document.querySelector('a[data-saved]');
+            var input = document.querySelector('input[name="link"]');
+            var setup = document.querySelector('.setup');
 
 
-        var req = new XMLHttpRequest();
-        req.open('POST', '/');
-        req.setRequestHeader('Content-Type', 'application/json');
-        req.onreadystatechange = function() {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var res = JSON.parse(req.responseText);
-                    redirect.href = res.plink;
-                    savedLink.href = res.link;
-                    savedLink.innerText = res.link;
-                } else {
-                    console.log('ERROR');
+            var req = new XMLHttpRequest();
+            req.open('POST', '/');
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.onreadystatechange = function() {
+                if (req.readyState == 4) {
+                    if (req.status == 200) {
+                        var res = JSON.parse(req.responseText);
+                        redirect.href = res.plink;
+                        savedLink.href = res.link;
+                        savedLink.innerText = res.link;
+                    } else {
+                        console.log('ERROR');
+                    }
+                }
+            };
+            req.send(JSON.stringify({
+                action: 'get'
+            }));
+
+            document.querySelector('.redirect').onclick = function() {
+                location.href = redirect.href;
+            }
+            save.onclick = function() {
+                if (input.value) {
+                    save.innerText = 'Ładowanie...';
+                    var req = new XMLHttpRequest();
+                    req.open('POST', '/');
+                    req.setRequestHeader('Content-Type', 'application/json');
+                    req.onreadystatechange = function() {
+                        if (req.readyState == 4) {
+                            if (req.status == 200) {
+                                var res = JSON.parse(req.responseText);
+                                redirect.href = res.plink;
+                                savedLink.href = res.link;
+                                savedLink.innerText = res.link;
+                                save.innerText = 'Gotowe!';
+                                setTimeout(() => {
+                                    save.innerText = 'Zapisz';
+                                }, 3000)
+                            } else {
+                                save.innerText = 'Nie udało sie uzyskać linku';
+                                setTimeout(() => {
+                                    save.innerText = 'Zapisz';
+                                }, 3000);
+                            }
+                        }
+                    };
+                    req.send(JSON.stringify({
+                        action: 'new',
+                        link: input.value
+                    }));
                 }
             }
-        };
-        req.send(JSON.stringify({
-            action: 'get'
-        }));
-
-        document.querySelector('.redirect').onclick = function() {
-            location.href = redirect.href;
-        }
-        save.onclick = function() {
-            if (input.value) {
-                save.innerText = 'Ładowanie...';
-                var req = new XMLHttpRequest();
-                req.open('POST', '/');
-                req.setRequestHeader('Content-Type', 'application/json');
-                req.onreadystatechange = function() {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-                            var res = JSON.parse(req.responseText);
-                            redirect.href = res.plink;
-                            savedLink.href = res.link;
-                            savedLink.innerText = res.link;
-                            save.innerText = 'Gotowe!';
-                            setTimeout(() => {
-                                save.innerText = 'Zapisz';
-                            }, 3000)
-                        } else {
-                            save.innerText = 'Nie udało sie uzyskać linku';
-                            setTimeout(() => {
-                                save.innerText = 'Zapisz';
-                            }, 3000);
-                        }
-                    }
-                };
-                req.send(JSON.stringify({
-                    action: 'new',
-                    link: input.value
-                }));
-            }
-        }
+        });
     </script>
 
 </body>
