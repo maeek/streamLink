@@ -58,7 +58,7 @@ const server = http.createServer((req, res) => {
                 });
 
                 getLink.on('error', function(e) {
-                    res.end({ status: false, error: e });
+                    res.end(JSON.stringify({ status: false, error: e }));
                 });
 
             } else {
