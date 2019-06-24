@@ -87,60 +87,64 @@
     </div>
 
     <script defer>
-        const save = document.querySelector('button');
-        const redirect = document.querySelector('a[data-redirect]');
-        const savedLink = document.querySelector('a[data-saved]');
-        const input = document.querySelector('input[name="link"]');
-        const setup = document.querySelector('.setup');
-        fetch('/', {
-                method: 'POST',
-                cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: 'get'
-                })
-            })
-            .then(res => res.json())
-            .then(res => {
-                redirect.href = res.plink;
-                savedLink.href = res.link;
-                savedLink.innerText = res.link;
-            });
+        var save = document.querySelector('button');
+        var redirect = document.querySelector('a[data-redirect]');
+        var savedLink = document.querySelector('a[data-saved]');
+        var input = document.querySelector('input[name="link"]');
+        var setup = document.querySelector('.setup');
+
+
+        var req = new XMLHttpRequest();
+        req.open('POST', '/');
+        req.setRequestHeader('Content-Type', 'application/json');
+        req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var res = JSON.parse(req.responseText);
+                    redirect.href = res.plink;
+                    savedLink.href = res.link;
+                    savedLink.innerText = res.link;
+                } else {
+                    console.log('ERROR');
+                }
+            }
+        };
+        req.send(JSON.stringify({
+            action: 'get'
+        }));
+
         document.querySelector('.redirect').onclick = function() {
             location.href = redirect.href;
         }
         save.onclick = function() {
             if (input.value) {
                 save.innerText = 'Ładowanie...';
-                fetch('/', {
-                        method: 'POST',
-                        cache: 'no-cache',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            action: 'new',
-                            link: input.value
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(res => {
-                        console.log(res.plink);
-                        redirect.href = res.plink;
-                        savedLink.href = res.link;
-                        savedLink.innerText = res.link;
-                        save.innerText = 'Gotowe!';
-                        setTimeout(() => {
-                            save.innerText = 'Zapisz';
-                        }, 3000)
-                    }).catch(e => {
-                        save.innerText = 'Nie udało sie uzyskać linku';
-                        setTimeout(() => {
-                            save.innerText = 'Zapisz';
-                        }, 3000);
-                    });
+                var req = new XMLHttpRequest();
+                req.open('POST', '/');
+                req.setRequestHeader('Content-Type', 'application/json');
+                req.onreadystatechange = function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+                            var res = JSON.parse(req.responseText);
+                            redirect.href = res.plink;
+                            savedLink.href = res.link;
+                            savedLink.innerText = res.link;
+                            save.innerText = 'Gotowe!';
+                            setTimeout(() => {
+                                save.innerText = 'Zapisz';
+                            }, 3000)
+                        } else {
+                            save.innerText = 'Nie udało sie uzyskać linku';
+                            setTimeout(() => {
+                                save.innerText = 'Zapisz';
+                            }, 3000);
+                        }
+                    }
+                };
+                req.send(JSON.stringify({
+                    action: 'new',
+                    link: input.value
+                }));
             }
         }
     </script>
