@@ -1,9 +1,6 @@
 # Stream link
 
-Get stream link for videos. Wrapper for:
-```
-youtube-dl -g
-```
+Get stream link for videos. Wrapper for: ```youtube-dl -g```
 
 ## Running
 
