@@ -7,10 +7,6 @@ Get stream link for videos. Wrapper for: ```youtube-dl -g```
 ```
 node index.js
 ```
-## Run in docker
-```
-docker run -d -v /path/to/streamLink/files:/srv --name streamLink -p 80:3000 -w /srv node-youtube-dl nodeindex.js
-```
 
 ## Preview
 
